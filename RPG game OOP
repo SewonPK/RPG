@@ -1,17 +1,21 @@
 import random
 
-Sword = {"Basic Sword":5, "Excalibur":99}
-Staff = {"Wooden Staff":5}
-Stick = {"Wooden Stick":1}
+Sword = {"Basic Sword": 2, "Shattered Katana": 50, "Excalibur": 99}
+Staff = {"Wooden Staff": 2}
+Stick = {"Wooden Stick": 1, "Wooden Stick+99": 9999}
 Armour = {}
 Robes = {}
 Heals = {}
+Items = {}
 Chance = 0
 collection = []
+Data = ["Class", "Weapon", "Equip"]
+Inventory = []
+
 
 class Character:
     def __init__(self):
-        self.name =""
+        self.name = ""
         self.level = 1
         self.attack = 0
         self.defence = 0
@@ -19,15 +23,12 @@ class Character:
         self.max_health = 0
         self.experience = 0
 
-    def get_equipment(self):
-
-
     def print_basics(self):
-        print("Name: ",self.name)
-        print("attack: ",self.attack)
-        print("defence ",self.defence)
-        print("Health: ",self.health, "/", self.max_health)
-        print("experience: ",self.experience)
+        print("Name: ", self.name)
+        print("attack: ", self.attack)
+        print("defence ", self.defence)
+        print("Health: ", self.health, "/", self.max_health)
+        print("experience: ", self.experience)
 
     def setter(self, name):
         self.name = name
@@ -37,62 +38,76 @@ class Character:
         self.health = self.max_health
 
     def check_level(self):
-        Req = 100*self.level
-        Req = int(Req)
+        Req = 100 * self.level
         Remain = Req - self.experience
-        Scaling = self.level/5
+        Scaling = int(10 * self.level / 5)
         if Remain <= 0:
             self.level = self.level + 1
-            print("Level up!\nYou are now Level",self.level)
+            print("\nLevel up!\nYou are now Level", self.level)
             self.experience = 0
-            self.attack = self.attack + (10*Scaling)
-            self.defence = self.defence + (10*Scaling)
-            self.health = self.defence + (10*Scaling)
+            self.attack = self.attack + Scaling
+            self.defence = self.defence + Scaling
+            self.max_health = self.max_health + Scaling
+            self.health = self.max_health
+            if Data[0] == "W":
+                Chara.magic = Chara.magic + Scaling
+            if Data[0] == "K":
+                Chara.Mastery = Chara.Mastery + Scaling
+            return True
+        else:
+            print("Level", self.level, self.experience, "/", Req, "Experience\n", Remain, "Needed until next level")
+            return False
 
     def __repr__(self):
         return self.name
+
 
 class wizard(Character):
     def __init__(self):
         Character.__init__(self)
         self.magic = 10
+        Data[0] = "W"
 
     def print_me(self):
         self.print_basics()
-        print("magic ",self.magic)
+        print("magic ", self.magic)
 
     class magic():
 
-        def fireball():
+        def fireball(self):
             print(Chara.name, "fires a fireball!")
 
+        def barrier(self):
+            print("hi")
 
 
 class knight(Character):
-   def __init__(self):
-       Character.__init__(self)
-       self.armour = 10
-       self.sword = ""
 
-   def print_me(self):
-       self.print_basics()
-       print("armour ",self.armour)
+    def __init__(self):
+        Character.__init__(self)
+        self.Mastery = 10
+        self.sword = ""
+        Data[0] = "K"
 
-   class actions():
+    def print_me(self):
+        self.print_basics()
+        print("Mastery ", self.Mastery)
+
+    class actions():
 
         def slash(self):
             print(Chara.name, "swings his sword")
-            Chance = random.randint(1,100)
-            Base =
+            Chance = random.randint(1, 100)
+            Base = 0
             if Chance == 1:
-               print("But he misses!\n0 Damage")
+                print("But he misses!\n0 Damage")
             elif Chance >= 90:
-               print("Critical hit!\n","X Damage")
+                print("Critical hit!\n", "X Damage")
             else:
-               print("hit!\n","X Damage")
+                print("hit!\n", "X Damage")
 
         def shield():
-            print("hi")
+            print("")
 
 
 class encounter():
@@ -106,15 +121,13 @@ class encounter():
     def show_stats(self):
         print("Attack: ", self.attack)
         print("Defence ", self.defence)
-        print("Health: ",self.health, "/", self.max_health)
+        print("Health: ", self.health, "/", self.max_health)
 
     def setter(self, level):
         self.level = level
-        self.attack = random.randint(1, 20)*level
-        self.defence = random.randint(0, 20)*level
-        self.max_health = random.randint(10, 20)*level
-
-
+        self.attack = random.randint(1, 20) * level
+        self.defence = random.randint(0, 20) * level
+        self.max_health = random.randint(10, 20) * level
 
 
 
@@ -123,16 +136,22 @@ Name = input("What is your name? ")
 Class = Class.upper()
 
 if Class == "K":
-   print("Welcome to the world knight", Name)
-   Chara = knight()
-   Chara.setter(Name)
+    print("\nWelcome to the world knight", Name)
+    Chara = knight()
+    Chara.setter(Name)
+    print("Take this to start your journey\n\nBasic Sword obtained!")
+    Data[1] = "Basic Sword"
 
 elif Class == "W":
-   print("Welcome great wizard", Name)
-   Chara = wizard()
+    print("Welcome great wizard", Name)
+    Chara = wizard()
+    Chara.setter(Name)
+    print("Take this to start your journey\n\nWooden Staff obtained!")
+    Data[1] = "Wooden Staff"
+    Chara.print_me()
 else:
-   print("You don't want either?\nwell you can be a peasant then!")
-   Chara = Character()
+    print("You don't want either?\nwell you can be a peasant then!")
+    Chara = Character()
 
 
 
