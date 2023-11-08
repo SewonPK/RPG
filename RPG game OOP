@@ -2,7 +2,7 @@ import random
 
 Sword = {"Basic Sword": 2, "Shattered Katana": 50, "Excalibur": 99}
 Staff = {"Wooden Staff": 2}
-Stick = {"Wooden Stick": 1, "Wooden Stick+99": 9999}
+Stick = {"Wooden Stick": 1}
 Armour = {}
 Robes = {}
 Heals = {}
